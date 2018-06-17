@@ -4,8 +4,11 @@ import numpy as np
 import commands
 import sys, time
 from time import sleep
+
+#videoCapture=cv2.VideoCapture(0)
+
 #Se inicia la camara
-captura = cv2.VideoCapture(0)
+#captura = cv2.VideoCapture(0)
 camera= cv2.VideoCapture(0)
 
 #Fotogramas 2
@@ -18,17 +21,14 @@ def get_image():
 
 def TomarImagen():
 	for i in xrange(fotograma):
-		for j in [1,2]:
-			impresion="Foto " + str(j)
-			print(impresion)
-			camera_capture = get_image()
-			localtime = time.asctime( time.localtime(time.time()))
-			file = "Captura "
-			cv2.imwrite(file + str(j)+ ' ' + localtime + '.png', camera_capture)
-			time.sleep(5)
+		camera_capture = get_image()
+		localtime = time.asctime( time.localtime(time.time()))
+		file = "Captura "
+		cv2.imwrite(file + localtime + '.png', camera_capture)
+			
 #convertir la imagen
 while(1):
-        _,imagen = captura.read()
+        _,imagen = camera.read()
         hsv = cv2.cvtColor(imagen, cv2.COLOR_BGR2HSV)
 
         #buscar objetos verdes
@@ -52,11 +52,12 @@ while(1):
                 #dibujamos el centro con un rectangulo
                 cv2.rectangle(imagen,(x, y), (x+2, y+2), (0,0,255), 2)
 		TomarImagen()
+		break
 	#resultado=commands.getoutput('/home/pi/Codigo/CapturaImagen.py')
         #mostrar imagen
         cv2.imshow('mask', mask)
         cv2.imshow('camara', imagen)
-	resultado2=commands.getoutput('/home/pi/Codigo/CapturaImagen.py')
+	#resultado2=commands.getoutput('/home/pi/Codigo/CapturaImagen.py')
         #escape para terminar programa
         tecla = cv2.waitKey(5) & 0xFF
 
@@ -65,4 +66,3 @@ while(1):
 
 del(camera)
 cv2.destroyAllWindows()
-
